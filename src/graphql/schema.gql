@@ -1,0 +1,105 @@
+scalar Date
+
+type User {
+  _id: ID!
+  username: String!
+  email: String!
+  created_at: Date
+  updated_at: Date
+}
+
+type ValidationError {
+  field: String
+  message: String
+}
+
+type AuthPayload {
+  success: Boolean!
+  message: String
+  token: String
+  user: User
+  errors: [ValidationError]
+}
+
+type Employee {
+  _id: ID!
+  first_name: String!
+  last_name: String!
+  email: String!
+  gender: String!
+  designation: String!
+  salary: Float!
+  date_of_joining: Date!
+  department: String!
+  employee_photo: String
+  created_at: Date
+  updated_at: Date
+}
+
+type EmployeeResponse {
+  success: Boolean!
+  message: String
+  employee: Employee
+  errors: [ValidationError]
+}
+
+type EmployeeListResponse {
+  success: Boolean!
+  message: String
+  employees: [Employee!]!
+  count: Int
+}
+
+type MutationResponse {
+  success: Boolean!
+  message: String
+}
+
+input SignupInput {
+  username: String!
+  email: String!
+  password: String!
+}
+
+input LoginInput {
+  usernameOrEmail: String!
+  password: String!
+}
+
+input AddEmployeeInput {
+  first_name: String!
+  last_name: String!
+  email: String!
+  gender: String!
+  designation: String!
+  salary: Float!
+  date_of_joining: String!
+  department: String!
+  employee_photo_base64: String
+}
+
+input UpdateEmployeeInput {
+  first_name: String
+  last_name: String
+  email: String
+  gender: String
+  designation: String
+  salary: Float
+  date_of_joining: String
+  department: String
+  employee_photo_base64: String
+}
+
+type Query {
+  login(input: LoginInput!): AuthPayload!
+  getAllEmployees: EmployeeListResponse!
+  getEmployeeByEid(eid: ID!): EmployeeResponse!
+  getEmployeesByDesignationOrDepartment(designation: String, department: String): EmployeeListResponse!
+}
+
+type Mutation {
+  signup(input: SignupInput!): AuthPayload!
+  addEmployee(input: AddEmployeeInput!): EmployeeResponse!
+  updateEmployeeByEid(eid: ID!, input: UpdateEmployeeInput!): EmployeeResponse!
+  deleteEmployeeByEid(eid: ID!): MutationResponse!
+}
